@@ -8,9 +8,9 @@ kge.nu/admin/app
 
 config.json
 {
-	static_pages: [
+	"static_pages": [
 		"kge.nu": '/',
-		"kge.nu/admin": '/'
+		"kge.nu/admin": '/',
 		"kge.nu/admin/settings/": '/'
 		""
 	] 
