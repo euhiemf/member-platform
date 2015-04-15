@@ -9,10 +9,9 @@ kge.nu/admin/app
 config.json
 {
 	"static_pages": [
-		"kge.nu": "/",
-		"kge.nu/admin": "/",
-		"kge.nu/admin/settings/": "/"
-		""
+		{"kge.nu": "/"},
+		{"kge.nu/admin": "/"},
+		{"kge.nu/admin/settings/": "/"}
 	] 
 }
 
@@ -29,6 +28,9 @@ The registration app:
 		* read only/read-write of the DB
 		* 
 	* 
+
+The registration - autofill app:
+	
 
 when the browser frame changes its url, the 
 
