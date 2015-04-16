@@ -70,10 +70,78 @@ Admin levels:
 
 
 
-1: main.js -> initialize settings model, receive from config.json
+hmm.... create a router.json that will contain all paths and their admin-level
+
+router.json
+{
+	"": {
+		"name": "Home",
+		"id": "home",
+		"admin-level": "admin",
+		"menu-item": {},
+	},
+	"/": "home",
+	"/dashboard": "home",
+
+	"/apps": {
+		"name": "Apps",
+		"id": "apps",
+		"admin-level": "nothing",
+		"menu-item": {
+			"/register": {
+				"name": "Register",
+				"id": "register",
+				"admin-level": "admin",
+				"menu-item": {}
+			}
+		}
+	},
+
+	"/settings": {
+		"name": "Settings",
+		"id": "settings",
+		"admin-level": "admin",
+		"menu-item": {
+			"/apps": {
+				"name": "Apps",
+				"id": "apps",
+				"admin-level": "admin",
+				"menu-item": {
+					"/register": {
+						"name": "Register",
+						"id": "register",
+						"admin-level": "admin",
+						"menu-item": {}
+					}
+				}
+			},
+			"/config-URL": {
+				"name": "Configure URLs",
+				"id": "config-url",
+				"admin-level": "super-admin",
+				"menu-item": {}
+			},
+			"/toggle-appstate": {
+				"name": "Toggle app-state",
+				"id": "toggle-app-state",
+				"admin-level": "super-admin",
+				"menu-item": {}
+			}
+		}
+	},
+	"/standalone": {
+		"/register": {
+			"id": "standalone-register",
+			"admin-level": "nothing"
+		}
+	}
+	"/register": "standalone-register"
+}
+
+1: main.js -> initialize settings model, receive from config.json, and router.json
 2: create router from the settings model
-3: navigate to the requested url
-4: 
+3: build menu
+4: navigate to the requested url
 
 
 The admin registration needs to post
@@ -84,6 +152,7 @@ The admin registration needs to post
 
 
 ```
+
 
 
 
