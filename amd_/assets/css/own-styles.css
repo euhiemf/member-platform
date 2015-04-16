@@ -1,0 +1,7 @@
+
+.main-app-container .page-wrap {
+	display: none;
+}
+.main-app-container .page-wrap.active {
+	display: block;
+}

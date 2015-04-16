@@ -1,0 +1,1 @@
+module.exports = class Routes extends Backbone.DeepModel

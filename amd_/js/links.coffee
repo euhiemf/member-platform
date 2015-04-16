@@ -1,53 +1,20 @@
 
-class Menu extends Backbone.View
+Menu = require './main-menu.coffee'
+AppRouter = require './AppRouter.coffee'
 
-	el: '#main-menu'
+Routes = require './RoutesModel.coffee'
 
-	events:
-		'click li:not(.has-children) a': (ev) ->
-			@$('.active-menu').removeClass 'active-menu'
-			$(ev.currentTarget).addClass 'active-menu'
+class Links extends Routes
+	initialize: -> 
+		window.links = @
 
+	route: ->
+		appRouter = new AppRouter()
 
+		appRouter.data = _.clone @toJSON()
+		appRouter.flatten()
+		Backbone.history.start({pushState: true})
 
-	render: ->
-
-		levels = ['first', 'second', 'third']
-
-		dataLoop = (o, base_url, base_el, level) ->
-
-			for key, val of o when _.has(o, key) and _.has(val, 'menu-item')
-				url = base_url + key
-
-				icon = if not val['icon'] then "" else val['icon']
-
-				el = $("<li><a href='##{url}'><i class='fa #{icon}'></i>#{val['name']}</a></li>")
-				base_el.append el
-				if _.keys(val['menu-item']).length > 0
-
-					el.addClass 'has-children'
-
-					el.find('a').append $('<span class="fa arrow"></span>')
-
-					nbel = $('<ul class="nav nav-' + levels[level] + '-level collapse"></ul>')
-					el.append nbel
-
-					dataLoop val['menu-item'], url + '/', nbel, level + 1
-
-
-		dataLoop @data, '/', @$el, 1
-
-		@$el.metisMenu();
-
-
-
-
-
-
-class Links extends Backbone.DeepModel
-	initialize: -> @
-
-	route: -> @
 	buildMenu: -> 
 		menu = new Menu()
 		menu.data = _.clone @toJSON()

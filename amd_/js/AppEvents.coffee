@@ -1,0 +1,1 @@
+window.AppEvents = _.extend {}, Backbone.Events

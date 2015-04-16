@@ -6,7 +6,8 @@
 		"icon": "fa-dashboard",
 		"menu-item": {}
 	},
-	"dashboard": "home",
+	"home": "",
+	"dashboard": "",
 
 	"apps": {
 		"name": "Apps",
@@ -27,6 +28,7 @@
 		"name": "Settings",
 		"id": "settings",
 		"admin-level": "admin",
+		"icon": "fa-wrench",
 		"menu-item": {
 			"apps": {
 				"name": "Apps",
@@ -52,8 +54,27 @@
 				"id": "toggle-app-state",
 				"admin-level": "super-admin",
 				"menu-item": {}
+			},
+			"on-qrinput": {
+				"name": "QR input handler",
+				"id": "on-qrinput",
+				"admin-level": "super-admin",
+				"menu-item": {}
 			}
 		}
+	},
+	"register": "standalone/register",
+
+
+
+
+
+
+	"login": {
+		"name": "Login",
+		"id": "login",
+		"admin-level": "nothing",
+		"menu-item": {}
 	},
 	"standalone": {
 		"register": {
@@ -61,11 +82,10 @@
 			"admin-level": "nothing"
 		}
 	},
-	"register": "standalone-register",
-	"login": {
-		"name": "Login",
-		"id": "login",
-		"admin-level": "nothing",
-		"menu-item": {}
+	"n": {
+		":num": {
+			"id": "qr-input",
+			"admin-level": "nothing"
+		}
 	}
 }
