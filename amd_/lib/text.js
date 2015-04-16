@@ -1,14 +1,14 @@
 /**
- * @license RequireJS text 2.0.12 Copyright (c) 2010-2014, The Dojo Foundation All Rights Reserved.
+ * @license amd_RequireJS text 2.0.12 Copyright (c) 2010-2014, The Dojo Foundation All Rights Reserved.
  * Available via the MIT or new BSD license.
- * see: http://github.com/requirejs/text for details
+ * see: http://github.com/amd_requirejs/text for details
  */
 /*jslint regexp: true */
-/*global require, XMLHttpRequest, ActiveXObject,
-  define, window, process, Packages,
+/*global amd_require, XMLHttpRequest, ActiveXObject,
+  amd_define, window, process, Packages,
   java, location, Components, FileUtils */
 
-define(['module'], function (module) {
+amd_define(['module'], function (module) {
     'use strict';
 
     var text, fs, Cc, Ci, xpcIsWindows,
@@ -207,7 +207,7 @@ define(['module'], function (module) {
             if (buildMap.hasOwnProperty(moduleName)) {
                 var content = text.jsEscape(buildMap[moduleName]);
                 write.asModule(pluginName + "!" + moduleName,
-                               "define(function () { return '" +
+                               "amd_define(function () { return '" +
                                    content +
                                "';});\n");
             }
@@ -245,8 +245,8 @@ define(['module'], function (module) {
             process.versions &&
             !!process.versions.node &&
             !process.versions['node-webkit'])) {
-        //Using special require.nodeRequire, something added by r.js.
-        fs = require.nodeRequire('fs');
+        //Using special amd_require.nodeRequire, something added by r.js.
+        fs = amd_require.nodeRequire('fs');
 
         text.get = function (url, callback, errback) {
             try {

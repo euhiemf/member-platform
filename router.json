@@ -3,17 +3,18 @@
 		"name": "Home",
 		"id": "home",
 		"admin-level": "admin",
-		"menu-item": {},
+		"icon": "fa-dashboard",
+		"menu-item": {}
 	},
-	"/": "home",
-	"/dashboard": "home",
+	"dashboard": "home",
 
-	"/apps": {
+	"apps": {
 		"name": "Apps",
 		"id": "apps",
 		"admin-level": "nothing",
+		"icon": "fa-table",
 		"menu-item": {
-			"/register": {
+			"register": {
 				"name": "Register",
 				"id": "register",
 				"admin-level": "admin",
@@ -22,17 +23,17 @@
 		}
 	},
 
-	"/settings": {
+	"settings": {
 		"name": "Settings",
 		"id": "settings",
 		"admin-level": "admin",
 		"menu-item": {
-			"/apps": {
+			"apps": {
 				"name": "Apps",
 				"id": "apps",
 				"admin-level": "admin",
 				"menu-item": {
-					"/register": {
+					"register": {
 						"name": "Register",
 						"id": "register",
 						"admin-level": "admin",
@@ -40,13 +41,13 @@
 					}
 				}
 			},
-			"/config-URL": {
+			"config-URL": {
 				"name": "Configure URLs",
 				"id": "config-url",
 				"admin-level": "super-admin",
 				"menu-item": {}
 			},
-			"/toggle-appstate": {
+			"toggle-appstate": {
 				"name": "Toggle app-state",
 				"id": "toggle-app-state",
 				"admin-level": "super-admin",
@@ -54,11 +55,17 @@
 			}
 		}
 	},
-	"/standalone": {
-		"/register": {
+	"standalone": {
+		"register": {
 			"id": "standalone-register",
 			"admin-level": "nothing"
 		}
 	},
-	"/register": "standalone-register"
+	"register": "standalone-register",
+	"login": {
+		"name": "Login",
+		"id": "login",
+		"admin-level": "nothing",
+		"menu-item": {}
+	}
 }
