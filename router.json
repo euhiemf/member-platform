@@ -1,0 +1,64 @@
+{
+	"": {
+		"name": "Home",
+		"id": "home",
+		"admin-level": "admin",
+		"menu-item": {},
+	},
+	"/": "home",
+	"/dashboard": "home",
+
+	"/apps": {
+		"name": "Apps",
+		"id": "apps",
+		"admin-level": "nothing",
+		"menu-item": {
+			"/register": {
+				"name": "Register",
+				"id": "register",
+				"admin-level": "admin",
+				"menu-item": {}
+			}
+		}
+	},
+
+	"/settings": {
+		"name": "Settings",
+		"id": "settings",
+		"admin-level": "admin",
+		"menu-item": {
+			"/apps": {
+				"name": "Apps",
+				"id": "apps",
+				"admin-level": "admin",
+				"menu-item": {
+					"/register": {
+						"name": "Register",
+						"id": "register",
+						"admin-level": "admin",
+						"menu-item": {}
+					}
+				}
+			},
+			"/config-URL": {
+				"name": "Configure URLs",
+				"id": "config-url",
+				"admin-level": "super-admin",
+				"menu-item": {}
+			},
+			"/toggle-appstate": {
+				"name": "Toggle app-state",
+				"id": "toggle-app-state",
+				"admin-level": "super-admin",
+				"menu-item": {}
+			}
+		}
+	},
+	"/standalone": {
+		"/register": {
+			"id": "standalone-register",
+			"admin-level": "nothing"
+		}
+	},
+	"/register": "standalone-register"
+}
