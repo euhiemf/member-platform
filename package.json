@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "watchify -o _amd/js/bundle.js -v -d _amd/js/app.coffee",
-    "build": "browserify . -t [envify --NODE_ENV production] | uglifyjs -cm > _amd/js/bundle.min.js"
+    "start": "watchify -o amd_/js/bundle.js -v -d amd_/js/app.coffee",
+    "build": "browserify . -t [envify --NODE_ENV production] | uglifyjs -cm > amd_/js/bundle.min.js"
   },
   "author": "Richard Samuelsson",
   "browserify": {
