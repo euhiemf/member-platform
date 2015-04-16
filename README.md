@@ -8,6 +8,7 @@ kge.nu/admin/app
 
 config.json
 {
+	"username": "euhiemf",
 	"static_pages": [
 		{"kge.nu": "/"},
 		{"kge.nu/admin": "/"},
@@ -15,7 +16,7 @@ config.json
 	] 
 }
 
-admin levels: normal admin, to just login to kge.nu/admin, and super admin that can change config.json by logging into github.com
+user levels: nothing and super admin that can change config.json by logging into github.com
 
 The super admin can create new apps, and new pages.
 
@@ -49,17 +50,40 @@ menus:
 			something else ->
 			events ->
 			register ->
+				// should contain option to access the database on killergame.nu with only a passphrase for mass-registration
 			etc ->
 	Logout: ->
 
 
+php coding:
+	when also sending login information
+	registring new accounts
+		https://github.com/panique/php-login-one-file
+	editing settings table
+
+
+
+Admin levels:
+	nothing: can only render apps that dont throw error when visiting as unpriveliged
+	admin: has login to the Database on killergame.nu, and can change the database.
+	super admin: logged in admin, with github login to change config.json, meaning adding apps etc.
+
 
 
 1: main.js -> initialize settings model, receive from config.json
-2: create router from the settings model.
-3: render 
+2: create router from the settings model
+3: navigate to the requested url
+4: 
 
+
+The admin registration needs to post
+	user_name: Username (only letters and numbers, 2 to 64 characters)
+	user_email: User's email
+	user_password_new: Password (min. 6 characters)
+	user_password_repeat: Repeat password
 
 
 ```
+
+
 
