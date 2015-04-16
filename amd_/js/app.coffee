@@ -1,7 +1,7 @@
 
 
 requirejs.config
-	baseUrl: 'amd_',
+	baseUrl: '/amd_',
 	paths:
 		config: '../config.json'
 		router: '../router.json'
