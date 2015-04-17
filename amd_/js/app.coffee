@@ -33,10 +33,13 @@ Links = require './links.coffee'
 
 Routes = require './RoutesModel.coffee'
 
+NProgress.start()
 
 amd_requirejs ['text!router', 'text!config'], (str_router, str_config) ->
 	# console.log str_r
 	# return
+
+	NProgress.done()
 
 	config = JSON.parse str_config
 
