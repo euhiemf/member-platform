@@ -79,12 +79,20 @@ class AppView extends Backbone.View
 			el.html 'Welcome to the homepage!'
 		'login': require('./pages/login.coffee')
 
-		'apps': (el, app_id) ->
-			el.html 'This is the apps page, will load ' + app_id
-		'app-settings': (el, app_id) ->
-			el.html 'This is the app settings page! for ' + app_id
 		'settings': (el, settings_page) ->
 			el.html 'This is the general settings page!, will display settings for ' + settings_page
+
+
+
+		'apps': (args...) -> require('./AppRender.coffee')('main')(args...)
+
+		'app-settings': (args...) -> require('./AppRender.coffee')('settings')(args...)
+			# amd_require ["coffee!apps/#{app_id}/settings"], do (el) -> (View) ->
+			# 	# el.html 'This is the app settings page! for ' + app_id
+			# 	view = new View {el: el}
+			# 	view.render()
+
+			
 
 
 

@@ -22,6 +22,9 @@ class Menu extends Backbone.View
 
 				el = $("<li id='#{val.id}'><a href='##{url}'><i class='fa #{icon}'></i>#{val['name']}</a></li>")
 				base_el.append el
+
+				if val.id is 'register-with-autofill' then console.log base_el.get(0)
+
 				if _.keys(val['menu-item']).length > 0
 
 					el.addClass 'has-children'

@@ -61,11 +61,12 @@ class AppRouter extends Backbone.Router
 
 
 				new_url = url + key
-				new_selector = selector + ' #' + val.id
+				new_selector = selector + ' > #' + val.id
 				# console.log url, new_url
 
 				if _.has(val, 'menu-item')
 					if _.keys(val['menu-item']).length > 0
+						new_selector += ' > ul'
 						flatLoop val['menu-item'], new_url + '/', new_selector
 					else
 						urls.push {url: new_url, id: val.id, selector: new_selector + ' a'}
@@ -84,6 +85,7 @@ class AppRouter extends Backbone.Router
 		urls.forEach (item) =>
 			@route item.url, item.url, do (item) -> ->
 				$('#main-menu .active-menu').removeClass 'active-menu'
+				console.log item.selector
 				$(item.selector).addClass 'active-menu'
 
 		url_refs.forEach (ref) =>

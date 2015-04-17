@@ -20,6 +20,12 @@
 				"id": "register",
 				"admin-level": "admin",
 				"menu-item": {}
+			},
+			"register-with-autofill": {
+				"name": "Register with autofill",
+				"id": "register-with-autofill",
+				"admin-level": "admin",
+				"menu-item": {}
 			}
 		}
 	},
@@ -40,7 +46,14 @@
 						"id": "register",
 						"admin-level": "admin",
 						"menu-item": {}
+					},
+					"register-with-autofill": {
+						"name": "Register with autofill",
+						"id": "register-with-autofill",
+						"admin-level": "admin",
+						"menu-item": {}
 					}
+
 				}
 			},
 			"config-URL": {

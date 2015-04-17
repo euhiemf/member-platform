@@ -1,0 +1,5 @@
+{
+	"amd_plugin": "coffee",
+	"main": "app.coffee",
+	"settings": "settings.coffee"
+}

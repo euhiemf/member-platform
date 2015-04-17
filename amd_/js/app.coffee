@@ -7,6 +7,7 @@ amd_requirejs.config
 		text: 'lib/text'
 		coffee: 'lib/cs'
 		apps: '/apps_'
+		noext: 'lib/noext'
 
 window.underscore = window._ = _ = require 'underscore'
 window.Backbone = Backbone = require 'backbone'
@@ -78,4 +79,4 @@ amd_requirejs ['text!router', 'text!config'], (str_router, str_config) ->
 
 # amd_requirejs ['coffee!apps/register/app'], (mod) ->
 
-# 	mod()
+# 	console.log mod()
