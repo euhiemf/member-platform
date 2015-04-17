@@ -15,12 +15,6 @@
 		"admin-level": "nothing",
 		"icon": "fa-table",
 		"menu-item": {
-			"register": {
-				"name": "Register",
-				"id": "register",
-				"admin-level": "admin",
-				"menu-item": {}
-			},
 			"register-with-autofill": {
 				"name": "Register with autofill",
 				"id": "register-with-autofill",
@@ -41,12 +35,6 @@
 				"id": "apps",
 				"admin-level": "admin",
 				"menu-item": {
-					"register": {
-						"name": "Register",
-						"id": "register",
-						"admin-level": "admin",
-						"menu-item": {}
-					},
 					"register-with-autofill": {
 						"name": "Register with autofill",
 						"id": "register-with-autofill",
