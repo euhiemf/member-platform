@@ -3,6 +3,9 @@ Promise = require('es6-promise').Promise
 
 
 module.exports = (type) -> do (type) -> (el, app_id) ->
+
+	NProgress.start()
+
 	# type = 'app' or 'settings'
 
 	getConfig = new Promise((resolve, reject) ->
@@ -44,6 +47,7 @@ module.exports = (type) -> do (type) -> (el, app_id) ->
 	renderView = (View) ->
 		# debugger
 
+		NProgress.done()
 		view = new View {el: el}
 		view?.render()
 
