@@ -43,8 +43,9 @@ amd_requirejs ['text!router', 'text!config'], (str_router, str_config) ->
 
 	config = JSON.parse str_config
 
-	window.AppEvents.on 'qr-input', do (config) -> (code) ->
-		console.log 'will send the QR-code', code, config['qr-input-handler']
+	# window.AppEvents.on 'qr-input', do (config) -> (code) ->
+		# window.AppEvents.trigger "render-apps", , el, config['qr-input-handler']
+		# console.log 'will send the QR-code', code, config['qr-input-handler']
 
 	parsed_router = JSON.parse(str_router)
 

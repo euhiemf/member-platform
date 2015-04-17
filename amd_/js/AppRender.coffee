@@ -4,6 +4,10 @@ Promise = require('es6-promise').Promise
 
 module.exports = (type) -> do (type) -> (el, app_id) ->
 
+
+	# TODO, if it has already been rendered, then simply .active the element
+	
+
 	NProgress.start()
 
 	# type = 'app' or 'settings'
