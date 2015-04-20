@@ -14,6 +14,9 @@ class AppRouter extends Backbone.Router
 
 			fragment = Backbone.history.fragment
 
+			# qr input handles itself despite the fact that it redirects to /apps/x
+			if name is 'qrinput' then return
+
 			if _.has @last_page, 'fragment'
 				if fragment is @last_page.fragment then return
 
@@ -113,9 +116,9 @@ class AppRouter extends Backbone.Router
 
 
 	
-	qrinput: (what) ->
-		# console.log window.AppEvents
-		if what then window.AppEvents.trigger 'qr-input', what
+	qrinput: (what) -> if what
+		@navigate "apps/#{window.config.get('qr-input-handler')}", {trigger: false, replace: true}
+		window.AppEvents.trigger 'qr-input', what
 	notfound: (error) -> if @last_page then @navigate @last_page.fragment, {trigger: false, replace: true} else console.log '404!'
 	standalone: (what) -> console.log "will load stanadlone of", what
 

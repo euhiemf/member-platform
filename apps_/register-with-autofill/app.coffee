@@ -1,44 +1,39 @@
 
 
-pages = 
-	'personal-number': ->
-		@$el.html "<input type='text' placeholder='Enter your personnummer' style='width: 200px'><button>Go</button> or <a href='no-link' id='next'>skip</a>"
-	'form': ->
-		@$el.html "<form>this is a form! <a href='no-link' id='prev'>Back</a></form>"
 
-
-pages_map = ['personal-number', 'form']
-current_page = 0
-
-next = ->
-	if current_page < pages_map.length - 1
-		current_page++
-		update @
-
-prev = ->
-	if current_page > 0
-		current_page--
-		update @
-
-update = (context) ->
-	pages[pages_map[current_page]].call context
-
-
-amd_define (req) ->
+amd_define ['text!./html/start.html', 'text!./html/form.html'], (templates...) ->
 
 	class View extends Backbone.View
+
+		initialize: ->
+
+			@current_page = 0
+			@once 'render', @render, @
+
+
 		events:
 			'click #next': 'next'
 			'click #prev': 'prev'
+			'submit form': (ev) -> ev.preventDefault()
+			'submit form#start': (ev) -> console.log 123123123
 
 
-		initialize: ->
-			@next = next.bind @
-			@prev = prev.bind @
+		next: ->
+			@current_page++
+			@update()
+		prev: ->
+			@current_page--
+			@update()
+
+		update: ->
+			@$el.html templates[@current_page]
+			try document.forms[0].querySelector('input').focus()
+			
 
 
-		render: ->
-			update @
+		render: (code) ->
+			console.log code
+			@update()
 
 
 	return View

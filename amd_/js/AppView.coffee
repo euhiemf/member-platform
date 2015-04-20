@@ -53,7 +53,7 @@ class AppView extends Backbone.View
 		@listenToRender()
 		@header = new AppHeader()
 
-	renderEl: (id, cb, args...) ->
+	renderEl: (id, cb, app_id, args...) ->
 
 		@$('.page-wrap.active').removeClass 'active'
 
@@ -62,9 +62,12 @@ class AppView extends Backbone.View
 		if @$("##{id}").length is 0
 			el = $('<div class="col-md-12 active page-wrap" id="' + id + '"></div>')
 			@$el.append el
-			cb el, args...
 		else
-			@$("##{id}").addClass 'active'
+			# debugger
+			el = @$("##{id}").addClass 'active'
+
+
+		cb el, app_id, args...
 
 
 	listenToRender: ->

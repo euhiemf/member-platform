@@ -42,20 +42,23 @@ amd_requirejs ['text!router', 'text!config'], (str_router, str_config) ->
 	NProgress.done()
 
 	config = JSON.parse str_config
-
-	# window.AppEvents.on 'qr-input', do (config) -> (code) ->
-		# window.AppEvents.trigger "render-apps", , el, config['qr-input-handler']
-		# console.log 'will send the QR-code', code, config['qr-input-handler']
-
 	parsed_router = JSON.parse(str_router)
 
-	links = new Links parsed_router 
 
 	window.routes = new Routes _.extend {}, parsed_router
+	window.config = new Backbone.DeepModel config
+	
 
-	# x = JSON.parse str_router
-	# console.log x
 
+	window.AppEvents.on 'qr-input', do (config) -> (code) ->
+		window.AppEvents.trigger "render-apps", config['qr-input-handler'], code
+		# console.log 'will send the QR-code', code, config['qr-input-handler']
+
+
+
+
+
+	links = new Links parsed_router 
 	links.buildMenu()
 	links.route()
 

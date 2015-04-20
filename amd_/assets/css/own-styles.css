@@ -5,3 +5,9 @@
 .main-app-container .page-wrap.active {
 	display: block;
 }
+.main-app-container .page-wrap#apps .page-container, .main-app-container .page-wrap#settings .page-container {
+	display: none;
+}
+.main-app-container .page-wrap#apps .page-container.active, .main-app-container .page-wrap#settings .page-container.active {
+	display: block;
+}

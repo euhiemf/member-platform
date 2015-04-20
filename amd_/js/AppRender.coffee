@@ -2,11 +2,18 @@
 Promise = require('es6-promise').Promise
 
 
-module.exports = (type) -> do (type) -> (el, app_id) ->
+views = {} # private views collection
+
+
+module.exports = (type) -> do (type) -> (el, app_id, args...) ->
 
 
 	# TODO, if it has already been rendered, then simply .active the element
 	
+	if _.has views, app_id
+		$(el).find('.page-container.active').removeClass 'active'
+		$(el).find(".page-container##{app_id}").addClass 'active'
+		return views[app_id].trigger 'render', args...
 
 	NProgress.start()
 
@@ -38,8 +45,7 @@ module.exports = (type) -> do (type) -> (el, app_id) ->
 			plugin = if config['amd_plugin'] then config['amd_plugin'] + "!" else ""
 
 			path = "#{plugin}apps/#{app_id}/#{config[type]}"
-
-			console.log path
+			
 			amd_requirejs([path], ((View) ->
 				resolve(View)
 			), (err)->
@@ -52,8 +58,13 @@ module.exports = (type) -> do (type) -> (el, app_id) ->
 		# debugger
 
 		NProgress.done()
-		view = new View {el: el}
-		view?.render()
+
+		app_container = $ "<div id='#{app_id}' class='active app-container'></div>"
+		$(el).append app_container
+
+		views[app_id] = new View {el: app_container}
+
+		views[app_id].trigger 'render', args...
 
 
 
