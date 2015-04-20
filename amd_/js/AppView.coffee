@@ -9,7 +9,12 @@ class AppHeader extends Backbone.View
 		@setPath()
 
 	update: ->
-		splits = Backbone.history.fragment.split '/'
+
+		if window.location.hash.length > 0
+			splits = window.location.hash.slice(1).split '/'
+		else 
+			splits = Backbone.history.fragment.split '/'
+
 		path = splits[0]
 
 		pretty_path = routes.get('')[splits[0]].name
@@ -36,7 +41,6 @@ class AppHeader extends Backbone.View
 		@$('.page-header').html @route.name
 
 	setPath: ->
-		console.log @pretty_path
 		el = $ '<li><a href="no-link">' + @pretty_path.replace(/\//g, '</a></li><li><a href="no-link">') + '</li>'
 		active = el.last()
 		active.html(active.text()).addClass 'active'
@@ -59,6 +63,7 @@ class AppView extends Backbone.View
 
 		@header.render()
 
+		x = @$("##{id}")
 		if @$("##{id}").length is 0
 			el = $('<div class="col-md-12 active page-wrap" id="' + id + '"></div>')
 			@$el.append el

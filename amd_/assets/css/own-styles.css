@@ -11,3 +11,10 @@
 .main-app-container .page-wrap#apps .page-container.active, .main-app-container .page-wrap#settings .page-container.active {
 	display: block;
 }
+
+body.standalone nav {
+	display: none;
+}
+body.standalone #page-wrapper {
+	margin: 0;
+}

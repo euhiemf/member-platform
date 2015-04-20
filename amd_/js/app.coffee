@@ -51,7 +51,7 @@ amd_requirejs ['text!router', 'text!config'], (str_router, str_config) ->
 
 
 	window.AppEvents.on 'qr-input', do (config) -> (code) ->
-		window.AppEvents.trigger "render-apps", config['qr-input-handler'], code
+		window.AppEvents.trigger('render-apps', config['qr-input-handler'].split('/')[1], code)
 		# console.log 'will send the QR-code', code, config['qr-input-handler']
 
 

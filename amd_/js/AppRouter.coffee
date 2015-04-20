@@ -9,27 +9,7 @@ class AppRouter extends Backbone.Router
 	standalone: (what) -> console.log 'standalone'
 	login: (what) -> console.log 'login'
 
-	initialize: ->
-		@listenTo @, 'route', (name, args) =>
-
-			fragment = Backbone.history.fragment
-
-			# qr input handles itself despite the fact that it redirects to /apps/x
-			if name is 'qrinput' then return
-
-			if _.has @last_page, 'fragment'
-				if fragment is @last_page.fragment then return
-
-			@last_page =
-				name: name,
-				args: args,
-				fragment: fragment
-
-			if name is 'notfound' then return
-
-			for module in @modules
-				match = fragment.match module[0]
-				if match then @trigger module[1], match[module[2]]
+	setEvents: ->
 
 		@on 'load-home', -> window.AppEvents.trigger('render-home')
 		@on 'load-login', -> window.AppEvents.trigger('render-login')
@@ -45,6 +25,38 @@ class AppRouter extends Backbone.Router
 			window.AppEvents.trigger('render-settings', target)
 
 
+	initialize: ->
+
+		@setEvents()
+
+		@listenTo @, 'route', @onRoute, @
+
+
+	onRoute: (name, args) ->
+
+		# qr input, standalone handles itself despite the fact that it redirects to /apps/x
+
+		fragment = Backbone.history.fragment
+
+		# dont call this function twice if already navigated
+		if _.has @last_page, 'fragment'
+			if fragment is @last_page.fragment then return
+
+
+		# remove standalone
+		if @last_page and name isnt 'standalone' and @last_page.name is 'standalone' then $(document.body).removeClass 'standalone'
+
+		@last_page =
+			name: name,
+			args: args,
+			fragment: fragment
+
+
+		if _.values(@routes).indexOf(name) > -1 then return
+
+		for module in @modules
+			match = fragment.match module[0]
+			if match then @trigger module[1], match[module[2]]
 
 	flatten: ->
 
@@ -81,15 +93,16 @@ class AppRouter extends Backbone.Router
 
 		flatLoop @data, '', '#main-menu'
 
-		window.r = @
-
-
+		@urls = urls
 
 		urls.forEach (item) =>
+
+			tht = @
+
 			@route item.url, item.url, do (item) -> ->
-				$('#main-menu .active-menu').removeClass 'active-menu'
-				console.log item.selector
-				$(item.selector).addClass 'active-menu'
+
+				tht.activateMenu(item.url)
+
 
 		url_refs.forEach (ref) =>
 			@route ref.target, do (ref) => =>
@@ -97,6 +110,13 @@ class AppRouter extends Backbone.Router
 
 
 		# @route 'home', -> console.log 'well somethign worked'
+
+	activateMenu: (url) ->
+		item = _.findWhere @urls, { url: url }
+
+		$('#main-menu .active-menu').removeClass 'active-menu'
+		$(item.selector).addClass 'active-menu'
+
 
 
 	routes:
@@ -116,11 +136,34 @@ class AppRouter extends Backbone.Router
 
 
 	
-	qrinput: (what) -> if what
-		@navigate "apps/#{window.config.get('qr-input-handler')}", {trigger: false, replace: true}
-		window.AppEvents.trigger 'qr-input', what
+	intoStandaloneState: (appid) ->
+		$(document.body).addClass 'standalone'
+		url = "apps/#{appid}"
+		@activateMenu url
+		window.location.hash = url
+
+	qrinput: (code) -> if code
+
+		handler_url = window.config.get('qr-input-handler')
+		handler_type = handler_url.split('/')[0]
+		handler_appid = handler_url.split('/')[1]
+
+		@navigate handler_url, {trigger: false, replace: true} #optional, but it might look better in the URL
+
+
+		if handler_type is 'standalone'
+			@intoStandaloneState handler_appid
+		else
+			@activateMenu handler_url
+
+		window.AppEvents.trigger 'qr-input', code # The handler for this is in app.coffee which might be kinda confusing, but whateva
+
 	notfound: (error) -> if @last_page then @navigate @last_page.fragment, {trigger: false, replace: true} else console.log '404!'
-	standalone: (what) -> console.log "will load stanadlone of", what
+	standalone: (appid) ->
+
+		@intoStandaloneState(appid)
+		window.AppEvents.trigger('render-apps', appid)
+		# @navigate "apps/#{appid}", {trigger: true, replace: true}
 
 
 
