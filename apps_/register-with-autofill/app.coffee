@@ -35,7 +35,7 @@ amd_define ['text!./html/start.html', 'text!./html/form.html', './es6-promise'],
 	Promise = Promise.Promise
 
 	checkPassword = (password) -> new Promise((resolve, reject) ->
-		request 'http://localhost/memberdev/user/noobtoothfairy@gmail.com', 'READ', password, {}, (data) -> (
+		request 'http://killergame.nu/members2/user/noobtoothfairy@gmail.com', 'READ', password, {}, (data) -> (
 			if data?.email is 'noobtoothfairy@gmail.com' then resolve() else reject(data)
 		)
 	)
@@ -96,7 +96,9 @@ amd_define ['text!./html/start.html', 'text!./html/form.html', './es6-promise'],
 
 		renderForm: (form) ->
 			pass = form.find('#passphrase').val()
-			nin = form.find('#personal-security-number').val()
+			nin = form.find('#personal-security-number').val().replace(/\s|\-/mg, '')
+			if nin.length > 10
+				nin = nin.slice 2
 
 			NProgress.start()
 			done = =>
@@ -120,7 +122,7 @@ amd_define ['text!./html/start.html', 'text!./html/form.html', './es6-promise'],
 				console.log arguments
 			)
 
-			
+
 		events:
 			'click #next': 'next'
 			'click #prev': 'prev'
