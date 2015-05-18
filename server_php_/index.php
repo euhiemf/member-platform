@@ -206,10 +206,12 @@ class OneFileLoginApplication
     {
         // check is user wants to see register page (etc.)
         // start the session, always needed!
-        $this->doStartSession();
+        // $this->doStartSession();
         // check for possible user interactions (login with session/post data or logout)
-        $this->performUserLoginAction();
+        
+        // $this->performUserLoginAction();
 
+        $this->doLoginWithPostData();
 
         if ($this->getUserLoginStatus()) {
 

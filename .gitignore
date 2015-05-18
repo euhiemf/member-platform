@@ -2,3 +2,4 @@
 .htaccess
 
 node_modules/
+server_php_/pwd.json
