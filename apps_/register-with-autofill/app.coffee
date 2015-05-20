@@ -35,12 +35,11 @@ amd_define ['text!./html/start.html', 'text!./html/form.html', 'text!./html/cam.
 	Promise = Promise.Promise
 
 	checkPassword = (password) -> new Promise((resolve, reject) ->
-		
+
 		url = 'http://killergame.nu/members2/user/noobtoothfairy@gmail.com'
 
 		if location.hostname is 'localhost'
 			url = 'http://localhost/memberdev/user/noobtoothfairy@gmail.com'
-		# url = 'http://192.168.0.100:8080/memberdev/user/noobtoothfairy@gmail.com'
 
 		request url, 'READ', password, {}, (data) -> (
 			if data?.email is 'noobtoothfairy@gmail.com' then resolve() else reject(data)
@@ -67,7 +66,10 @@ amd_define ['text!./html/start.html', 'text!./html/form.html', 'text!./html/cam.
 			'submit form#start': (ev) ->
 				form = $(ev.currentTarget)
 				@renderForm form
-			'submit form#form': 'next'
+			'submit form#form': ->
+				@saveForm()
+				@next()
+
 			'submit form#selfie': -> #do the final send!
 
 			'click #webcam': =>
@@ -101,6 +103,9 @@ amd_define ['text!./html/start.html', 'text!./html/form.html', 'text!./html/cam.
 				Webcam.attach @$('#webcam').get(0)
 
 
+
+		saveForm: ->
+			
 
 		appendFormdata: ->
 			mappings = 
