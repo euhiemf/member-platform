@@ -30,7 +30,21 @@ request = (url, crud, pass, data, cb) ->
 		headers: headers
 
 		success: cb
+request_file = (url, crud, pass, payload, cb) ->
+	headers =
+		auth_identity: "admin"
+		auth_secret: pass
 
+
+	$.ajax
+		type: 'POST'
+		cache: false
+		contentType: false
+		processData: false
+		url: url
+		data: payload
+		headers: headers
+		success: cb
 
 
 amd_define ['text!./html/start.html', 'text!./html/form.html', 'text!./html/cam.html', 'text!./html/done.html', './es6-promise', './webcam'], (templates..., Promise, Webcam) ->
@@ -95,7 +109,9 @@ amd_define ['text!./html/start.html', 'text!./html/form.html', 'text!./html/cam.
 						sp 2
 						request(base_url + '/credentials', 'CREATE', tht.pass, tht.form_data, ->
 							sp 3
-							request(base_url + '/image', 'CREATE', tht.pass, {image: tht.selfie_url}, ->
+							image_data = new FormData()
+							image_data.append 'image', tht.selfie_url
+							request_file(base_url + '/image', 'CREATE', tht.pass, image_data, ->
 								sp 4
 								setTimeout((->
 									tht.$('.loading').hide()

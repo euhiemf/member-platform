@@ -181,6 +181,7 @@
 
 			$headers = array_merge($headers, getallheaders());
 			$headers = array_merge($headers, $_REQUEST);
+			$headers = array_merge($headers, $_FILES);
 
 			if (isset($headers['payload'])) {
 
