@@ -83,7 +83,7 @@
 			} elseif ($this->databaseAuth()) {
 
 			} else {
-				echo 'other authoization method';
+				die('{"error": "You are not authorized"}');
 			}
 
 		}

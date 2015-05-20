@@ -30,28 +30,57 @@ request = (url, crud, pass, data, cb) ->
 
 
 
-amd_define ['text!./html/start.html', 'text!./html/form.html', './es6-promise'], (templates..., Promise) ->
+amd_define ['text!./html/start.html', 'text!./html/form.html', 'text!./html/cam.html', './es6-promise', './webcam'], (templates..., Promise, Webcam) ->
 
 	Promise = Promise.Promise
 
 	checkPassword = (password) -> new Promise((resolve, reject) ->
-		request 'http://killergame.nu/members2/user/noobtoothfairy@gmail.com', 'READ', password, {}, (data) -> (
+		url = 'http://killergame.nu/members2/user/noobtoothfairy@gmail.com'
+		url = 'http://localhost/memberdev/user/noobtoothfairy@gmail.com'
+		# url = 'http://192.168.0.100:8080/memberdev/user/noobtoothfairy@gmail.com'
+
+		request url, 'READ', password, {}, (data) -> (
 			if data?.email is 'noobtoothfairy@gmail.com' then resolve() else reject(data)
 		)
 	)
 
 	getAutofill = (nin) -> new Promise((resolve, reject) ->
-		$.ajax
+		settings = 
 			url: 'http://killergame.nu/members/index.php?action=get_autofill&q=' + nin
 			type: "GET",
 			dataType: 'json'
-			success: resolve
-			error: reject
+
+		$.ajax(settings).done(resolve).always(reject)
 
 	)
 
 
 	class View extends Backbone.View
+
+		events:
+			'click #next': 'next'
+			'click #prev': 'prev'
+			'submit form': (ev) -> ev.preventDefault()
+			'submit form#start': (ev) ->
+				form = $(ev.currentTarget)
+				@renderForm form
+			'submit form#form': 'next'
+			'submit form#selfie': -> #do the final send!
+
+			'click #webcam': =>
+				Webcam.snap (data_uri) =>
+					
+					@selfie_url = data_uri
+
+					@$('#result img').attr('src', data_uri)
+					@$('#webcam').hide()
+					@$('#result').show()
+
+			'click #result': ->
+				@$('#webcam').show()
+				@$('#result').hide()
+
+
 
 		initialize: ->
 
@@ -64,6 +93,10 @@ amd_define ['text!./html/start.html', 'text!./html/form.html', './es6-promise'],
 				@$('#input_card_number').val @code
 				if @formdata
 					@appendFormdata()
+
+			@on 'render:2', ->
+				Webcam.attach @$('#webcam').get(0)
+
 
 
 		appendFormdata: ->
@@ -123,13 +156,6 @@ amd_define ['text!./html/start.html', 'text!./html/form.html', './es6-promise'],
 			)
 
 
-		events:
-			'click #next': 'next'
-			'click #prev': 'prev'
-			'submit form': (ev) -> ev.preventDefault()
-			'submit form#start': (ev) ->
-				form = $(ev.currentTarget)
-				@renderForm form
 
 
 

@@ -92,7 +92,11 @@
 			$headers = getallheaders();
 			if (isset($headers['X-HTTP-Method-Override'])) {
 				$this->method = $headers['X-HTTP-Method-Override'];
-			} else {
+			} elseif (isset($headers['X-Http-Method-Override'])) {
+				// på binero blir det små bokstäver i X-Http-Method-Override?!
+				$this->method = $headers['X-Http-Method-Override'];
+			}
+			else {
 				$this->method = $_SERVER['REQUEST_METHOD'];
 			}
 
