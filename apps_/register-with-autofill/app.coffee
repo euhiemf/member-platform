@@ -35,8 +35,11 @@ amd_define ['text!./html/start.html', 'text!./html/form.html', 'text!./html/cam.
 	Promise = Promise.Promise
 
 	checkPassword = (password) -> new Promise((resolve, reject) ->
+		
 		url = 'http://killergame.nu/members2/user/noobtoothfairy@gmail.com'
-		url = 'http://localhost/memberdev/user/noobtoothfairy@gmail.com'
+
+		if location.hostname is 'localhost'
+			url = 'http://localhost/memberdev/user/noobtoothfairy@gmail.com'
 		# url = 'http://192.168.0.100:8080/memberdev/user/noobtoothfairy@gmail.com'
 
 		request url, 'READ', password, {}, (data) -> (
@@ -69,7 +72,7 @@ amd_define ['text!./html/start.html', 'text!./html/form.html', 'text!./html/cam.
 
 			'click #webcam': =>
 				Webcam.snap (data_uri) =>
-					
+
 					@selfie_url = data_uri
 
 					@$('#result img').attr('src', data_uri)
