@@ -78,6 +78,10 @@
 			}
 		}
 
+		private function message($text) {
+			return "{\"message\": \"$text\"}";
+		}
+
 		public function CREATE($email, $data) {
 			$data = $this->validateData($data);
 			$this->db->setStudentCredentials($email, $data);
@@ -95,7 +99,7 @@
 		public function DELETE($email) {
 			// $data = $this->validateData($data);
 			$this->db->deleteStudentCredentials($email);
-			echo "deleted credentials of $email";
+			echo $this->message("deleted credentials of $email");
 		}
 	}
 

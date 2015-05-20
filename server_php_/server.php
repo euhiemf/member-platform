@@ -97,6 +97,10 @@
 			case 'card':
 				$import_name = 'db_card';
 				break;
+			case 'image':
+				$import_name = 'db_image';
+				break;
+			default: die('{"message": "not valid path"}');
 		}
 
 		$database->import($import_name, 'resource/' . $import_name . '.php');

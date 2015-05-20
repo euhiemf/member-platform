@@ -4,10 +4,10 @@
 	/**
 	* 
 	*/
-	class db_card
+	class db_image
 	{
 		private function studentExists($email) {
-			// The students should not be able to change their card number on their own.
+			// The students should not be able to change their image number on their own.
 			return false;
 		}
 
@@ -25,18 +25,18 @@
 			return true;
 
 		}	
-
 		private function message($text) {
 			return "{\"message\": \"$text\"}";
 		}
 
-
 		public function CREATE($email, $data) {
-			$this->db->bindCard($email, $data->card_number);
-			echo $this->message("You have registerd your card!");
-
+			die(print_r($data));
+			$this->db->bindImage($email, $data->image);
+			echo $this->message("you have now added an image");
 		}
 		public function READ($email) {
+			$url = $this->db->getImage($email);
+			echo "<img src='$url'>";
 			# code...
 		}
 		public function UPDATE($email, $data) {

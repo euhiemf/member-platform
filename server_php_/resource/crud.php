@@ -38,6 +38,9 @@
 		GET /user/noobtoothfairy@gmail.com/card
 			show user card info and code
 
+		GET /user/noobtoothfairy@gmail.com/image
+			show the user avatar
+
 		POST /user/noobtoothfairy@gmail.com/
 			create a new user
 
@@ -49,6 +52,10 @@
 			if the user of email does not exist, then create it
 			add card code to the user of email
 
+		POST /user/noobtoothfairy@gmail.com/image
+			if the user of email does not exist, then create it
+			add image user of email
+
 		PUT /user/noobtoothfairy@gmail.com/
 			update the users email address
 
@@ -56,6 +63,9 @@
 			update the credentials to the user of email
 
 		PUT /user/noobtoothfairy@gmail.com/card
+			update card to the user of email
+
+		PUT /user/noobtoothfairy@gmail.com/image
 			update card to the user of email
 
 
@@ -68,7 +78,8 @@
 		DELETE /user/noobtoothfairy@gmail.com/card
 			delete the card from the databaes
 
-
+		DELETE /user/noobtoothfairy@gmail.com/image
+			delete the image from the databaes
 	
 
 	*/
@@ -123,34 +134,64 @@
 			$this->parseRequest();
 
 		}
-		private function setParamsRaw() {
+		private function getParamsRaw() {
 
 			$raw  = '';
 			$httpContent = fopen('php://input', 'r');
 			while ($kb = fread($httpContent, 1024)) {
 				$raw .= $kb;
 			}
-			$params = json_decode(stripslashes($raw));
-			$this->params = json_decode(stripslashes($raw));
+			$raw = stripslashes($raw);
+
+			if ($raw) {
+				$params = get_object_vars(json_decode($raw));
+			} else {
+				$params = array();
+			}
 
 
+			return $params;
+		}
+		private function arrayToObject($array) {
+			if (!is_array($array)) {
+				return $array;
+			}
+
+			$object = new stdClass();
+			if (is_array($array) && count($array) > 0) {
+				foreach ($array as $name=>$value) {
+					$name = strtolower(trim($name));
+					if (!empty($name)) {
+						$object->$name = $this->arrayToObject($value);
+					}
+				}
+				return $object;
+			}
+			else {
+				return FALSE;
+			}
 		}
 		protected function parseRequest() {
-			if ($this->method == 'PUT') {
+			$headers = array();
 
-				$this->setParamsRaw();
 
-			} else {
+			// if ($this->method == 'PUT') {
+			$headers = array_merge($headers, $this->getParamsRaw());
+			// }
 
-				$headers = array_merge(getallheaders(), $_REQUEST);
+			$headers = array_merge($headers, getallheaders());
+			$headers = array_merge($headers, $_REQUEST);
 
-				if (isset($headers['payload'])) {
-					$this->params =  json_decode(stripslashes($headers['payload']));
-				} else {
-					$this->setParamsRaw();
-				}
+			if (isset($headers['payload'])) {
 
+				$json = json_decode(utf8_encode(stripslashes($headers['payload'])));
+				$pl = get_object_vars($json);
+				$headers = array_merge($headers, $pl);
 			}
+
+			$this->params = $this->arrayToObject($headers);
+			// die(print_r($this->params));
+
 		}
 
 		public function handle($target, $callback) {

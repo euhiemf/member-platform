@@ -32,6 +32,10 @@
 
 		}
 
+		private function message($text) {
+			return "{\"message\": \"$text\"}";
+		}
+
 
 		public function CREATE($email)
 		{
@@ -47,7 +51,7 @@
 
 				$this->db->createUserAndAddItToGroup($email, 'student');
 
-				echo "Added user student of email $email";
+				echo $this->message("Added user student of email $email");
 
 
 			} else {
@@ -70,7 +74,7 @@
 
 				$id = $this->db->getStudentID($email);
 				if ($id == false) {
-					echo "Couln't find the user of $email";
+					echo $this->message("Couln't find the user of $email");
 				} else {
 					echo "{\"id\": \"$id\", \"email\": \"$email\", \"group\": \"student\"}";
 				}
@@ -89,12 +93,12 @@
 			$id = $this->db->getStudentID($new_email);
 
 			if ($exist_id == false) {
-				echo "$old_email does not exist!";
+				echo $this->message("$old_email does not exist!");
 				return false;
 			}
 
 			if ($id != false) {
-				echo "$new_email email is already taken";
+				echo $this->message("$new_email email is already taken");
 				return false;
 			}
 

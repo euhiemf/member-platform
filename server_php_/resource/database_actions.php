@@ -177,7 +177,7 @@
 		}
 
 		public function bindCard($email, $card_number) {
-	    	$id = $this->getIdFromEmail($email);
+	    	$id = $this->getStudentID($email);
 	    	$datetime = time();
 
 	    	$sql = "INSERT INTO cards (sql_index, card_id, issued, active, cetera) VALUES(NULL, :card_id, :datetime, 'yes', '')";
@@ -191,6 +191,29 @@
 	        $query->bindValue(':student_id', $id);
 	        $query->bindValue(':card_id', $card_number);
 			$query->execute();
+		}
+		public function bindImage($email, $image) {
+	    	$id = $this->getStudentID($email);
+	    	$sql = "INSERT INTO student_images (sql_index, student_id, image, cetera) VALUES(NULL, :student_id, :image, '')";
+	    	$query = $this->db_connection->prepare($sql);
+	        $query->bindValue(':student_id', $id);
+	        $query->bindValue(':image', $image);
+			$query->execute();
+		}
+		public function getImage($email) {
+			$sql = 'SELECT image FROM student_images WHERE id = :id LIMIT 1';
+
+	    	$id = $this->getStudentID($email);
+			$query = $this->db_connection->prepare($sql);
+			$query->bindValue(':id', $id);
+			$query->execute();
+			if ($result_row) {
+
+				return $result_row->image;
+
+			} else {
+				return false;
+			}
 		}
 
 		public function createGroup($name, $level = 1) {

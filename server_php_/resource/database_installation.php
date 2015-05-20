@@ -84,6 +84,12 @@
 				`active` varchar(64),
 				`cetera` varchar(64));',
 
+				'CREATE TABLE IF NOT EXISTS `student_images` (
+				`sql_index` INTEGER PRIMARY KEY,
+				`student_id` INTEGER,
+				`image` TEXT,
+				`cetera` varchar(64));'
+
 			);
 
 				

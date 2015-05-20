@@ -1,11 +1,14 @@
 
 request = (url, crud, pass, data, cb) ->
 
-	data = _.extend data,
+	headers =
 		auth_identity: "admin"
 		auth_secret: pass
 
+	data = _.extend headers, data
 	payload = JSON.stringify data
+
+	headers = _.extend headers, { payload: payload }
 
 	switch crud
 		when 'CREATE' then method = 'POST'
@@ -24,13 +27,13 @@ request = (url, crud, pass, data, cb) ->
 
 		dataType: 'json'
 		data: payload
-		headers: _.extend data, { payload: payload }
+		headers: headers
 
 		success: cb
 
 
 
-amd_define ['text!./html/start.html', 'text!./html/form.html', 'text!./html/cam.html', './es6-promise', './webcam'], (templates..., Promise, Webcam) ->
+amd_define ['text!./html/start.html', 'text!./html/form.html', 'text!./html/cam.html', 'text!./html/done.html', './es6-promise', './webcam'], (templates..., Promise, Webcam) ->
 
 	Promise = Promise.Promise
 
@@ -70,69 +73,142 @@ amd_define ['text!./html/start.html', 'text!./html/form.html', 'text!./html/cam.
 				@saveForm()
 				@next()
 
-			'submit form#selfie': -> #do the final send!
+			'submit form#selfie': ->
+				# create
+				# request(url, crud, pass, data, cb)
 
-			'click #webcam': =>
-				Webcam.snap (data_uri) =>
+				@next()
+
+				base_url = 'http://killergame.nu/members2/user/' + @form_data['user_email']
+				NProgress.start()
+
+				tht = @
+
+				sp = (step) ->
+					NProgress.set 0.25 * step
+					tht.$("#progress").html step
+
+
+				request(base_url, 'CREATE', tht.pass, {}, ->
+					sp 1
+					request(base_url + '/card', 'CREATE', tht.pass, {card_number: tht.code}, ->
+						sp 2
+						request(base_url + '/credentials', 'CREATE', tht.pass, tht.form_data, ->
+							sp 3
+							request(base_url + '/image', 'CREATE', tht.pass, {image: tht.selfie_url}, ->
+								sp 4
+								setTimeout((->
+									tht.$('.loading').hide()
+									tht.$('.finish').show()
+									NProgress.done()
+								), 750)
+							)
+						)
+					)
+				)
+
+
+			'click #webcam': ->
+
+				Webcam.snap ((data_uri) ->
 
 					@selfie_url = data_uri
 
 					@$('#result img').attr('src', data_uri)
-					@$('#webcam').hide()
-					@$('#result').show()
+					@$('#webcam-container').hide()
+					@$('#result-container').show()
+
+				).bind @
 
 			'click #result': ->
-				@$('#webcam').show()
-				@$('#result').hide()
+
+				@$('#webcam-container').show()
+				@$('#result-container').hide()
 
 
+		consts: ->
+			@current_page = 0
+			@selfie_url = ""
+			@code = ""
+			@form_data = {}
 
 		initialize: ->
 
-			@current_page = 0
-			@code = ""
+			@delegateEvents()
+			@consts()
+
+
 			@once 'render', @render, @
 
-
 			@on 'render:1', ->
+
 				@$('#input_card_number').val @code
-				if @formdata
-					@appendFormdata()
+
+				if @autocomplete_data
+					@autofill @autocomplete_data
 
 			@on 'render:2', ->
 				Webcam.attach @$('#webcam').get(0)
+				video_el = @$('#webcam video').get(0)
+
+				$(video_el).on 'playing', (->
+
+					whr = video_el.videoWidth / video_el.videoHeight
+
+					w = $('#webcam').width()
+					h = w / whr
+
+					@$(video_el).width(w).height(h).css({width: w + 'px', height: h + 'px'})
+					@$('#webcam').width(w).height(h).css({width: w + 'px', height: h + 'px'})
+					@$('#result').width(w).height(h).css({width: w + 'px', height: h + 'px'})
+
+
+					Webcam.set
+						width: w
+						height: h
+						dest_width: w
+						dest_height: h
+
+				).bind @
 
 
 
 		saveForm: ->
-			
+			for key, ob_val of @mappings
+				el = @$("##{key}")
+				val = el.val()
+				name = el.attr('name')
+				@form_data[name] = val
+				@autocomplete_data[ob_val] = val
 
-		appendFormdata: ->
-			mappings = 
-				"input_sd_mobile_number": "Annattelefonnummer"
-				"input_co_address": "Co-Adress"
-				"input_login_email": "E-Post"
-				"input_last_name": "Efternamn"
-				"input_first_name": "Förnamn"
-				"input_street_address": "Gatuadress"
-				"input_class": "Klass"
-				"input_sex": "Kön"
-				"input_mobile_number": "Mobilnr."
-				"input_post_town": "Ort"
-				"input_nin": "Personnr"
-				"input_postal_number": "Postnummer"
+			@code = @$("#input_card_number").val()
 
-			for key, val of mappings
-				@$("#" + key).val @formdata[val]
-				console.log key, @formdata[val]
+		mappings: 
+			"input_sd_mobile_number": "Annattelefonnummer"
+			"input_co_address": "Co-Adress"
+			"input_login_email": "E-Post"
+			"input_last_name": "Efternamn"
+			"input_first_name": "Förnamn"
+			"input_street_address": "Gatuadress"
+			"input_class": "Klass"
+			"input_sex": "Kön"
+			"input_mobile_number": "Mobilnr."
+			"input_post_town": "Ort"
+			"input_nin": "Personnr"
+			"input_postal_number": "Postnummer"
+
+		autofill: (what)->
+
+			for key, val of @mappings
+				@$("#" + key).val what[val]
 
 
 
-		setFormdata: (data) =>
-			@formdata = {}
+		setAutoCompleteData: (data) =>
+			@autocomplete_data = {}
 			for key, val of data
 				key = key.replace(/\s|\r|\n/mg, '')
-				@formdata[key] = val
+				@autocomplete_data[key] = val
 
 
 		renderForm: (form) ->
@@ -144,13 +220,14 @@ amd_define ['text!./html/start.html', 'text!./html/form.html', 'text!./html/cam.
 			NProgress.start()
 			done = =>
 				@next()
+				@pass = pass
 				NProgress.done()
 
 
 			getNINdata = =>
 				NProgress.set(0.5)
 				getAutofill(nin).then(((data) =>
-					@setFormdata(data);
+					@setAutoCompleteData(data);
 					done()
 				).bind(@)).catch(=>
 					done()
