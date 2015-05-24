@@ -49,7 +49,7 @@
 				'postal_number' => 'not_empty',
 				'post_town' => 'not_empty',
 				'mobile_number' => 'not_empty',
-				'sd_mobile_number' => 'not_empty',
+				'sd_mobile_number' => 'whateva',
 				'class' => 'not_empty'
 			);
 
