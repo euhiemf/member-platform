@@ -183,15 +183,20 @@
 			$headers = array_merge($headers, $_REQUEST);
 			$headers = array_merge($headers, $_FILES);
 
-			if (isset($headers['payload'])) {
+			if (array_key_exists('payload', $headers) || array_key_exists('Payload', $headers)) {
 
-				$json = json_decode(utf8_encode(stripslashes($headers['payload'])));
+				// This code can probably be done nicer
+				if ( array_key_exists('payload', $headers) ) {
+					$json = json_decode(utf8_encode(stripslashes($headers['payload'])));
+				} else {
+					$json = json_decode(utf8_encode(stripslashes($headers['Payload'])));
+				}
+
 				$pl = get_object_vars($json);
 				$headers = array_merge($headers, $pl);
 			}
 
 			$this->params = $this->arrayToObject($headers);
-			// die(print_r($this->params));
 
 		}
 

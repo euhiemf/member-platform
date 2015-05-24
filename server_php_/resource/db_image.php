@@ -30,7 +30,6 @@
 		}
 
 		public function CREATE($email, $data) {
-			die(print_r($data));
 			$this->db->bindImage($email, $data->image);
 			echo $this->message("you have now added an image");
 		}

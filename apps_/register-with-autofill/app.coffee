@@ -128,8 +128,11 @@ amd_define ['text!./html/start.html', 'text!./html/form.html', 'text!./html/uplo
 
 				@$(".loading").show()
 				@$('.hide-on-done').hide()
-
 				base_url = 'http://killergame.nu/members2/user/' + @form_data['user_email']
+
+				if location.hostname is 'localhost'
+					base_url = 'http://localhost/memberdev/user/' + @form_data['user_email']
+
 				NProgress.start()
 
 				tht = @
