@@ -47,7 +47,7 @@ request_file = (url, crud, pass, payload, cb) ->
 		success: cb
 
 
-amd_define ['text!./html/start.html', 'text!./html/form.html', 'text!./html/cam.html', 'text!./html/done.html', './es6-promise', './webcam'], (templates..., Promise, Webcam) ->
+amd_define ['text!./html/start.html', 'text!./html/form.html', 'text!./html/upload.html', 'text!./html/cam.html', 'text!./html/done.html', './es6-promise', './webcam'], (templates..., Promise, Webcam) ->
 
 	Promise = Promise.Promise
 
@@ -87,11 +87,47 @@ amd_define ['text!./html/start.html', 'text!./html/form.html', 'text!./html/cam.
 				@saveForm()
 				@next()
 
-			'submit form#selfie': ->
+			'click #selfie-upload': 'next'
+
+			'click #upload-data': ->
 				# create
 				# request(url, crud, pass, data, cb)
 
-				@next()
+
+
+			'click #webcam': ->
+
+				Webcam.snap ((data_uri) ->
+
+					@selfie_url = data_uri
+
+					@$('#result img').attr('src', data_uri)
+					@$('#webcam-container').hide()
+					@$('#result-container').show()
+
+				).bind @
+
+			'click #go-upload-page': ->
+				@current_page -= 2
+				@update()
+
+
+			'click #result': ->
+
+				@$('#webcam-container').show()
+				@$('#result-container').hide()
+
+			'change #file-upload': (ev) ->
+				@file_select_file = $(ev.currentTarget).get(0).files[0]
+				@current_page += 2
+				@update()
+
+			'submit #selfie': 'next'
+
+			'click #upload-everything': ->
+
+				@$(".loading").show()
+				@$('.hide-on-done').hide()
 
 				base_url = 'http://killergame.nu/members2/user/' + @form_data['user_email']
 				NProgress.start()
@@ -109,38 +145,41 @@ amd_define ['text!./html/start.html', 'text!./html/form.html', 'text!./html/cam.
 						sp 2
 						request(base_url + '/credentials', 'CREATE', tht.pass, tht.form_data, ->
 							sp 3
-							image_data = new FormData()
-							image_data.append 'image', tht.selfie_url
-							request_file(base_url + '/image', 'CREATE', tht.pass, image_data, ->
-								sp 4
-								setTimeout((->
-									tht.$('.loading').hide()
-									tht.$('.finish').show()
-									NProgress.done()
-								), 750)
-							)
+							tht.getImageURL (image_data) ->
+								request_file(base_url + '/image', 'CREATE', tht.pass, image_data, ->
+									sp 4
+									setTimeout((->
+										tht.$('.loading').hide()
+										tht.$('.finish').show()
+										NProgress.done()
+									), 750)
+								)
 						)
 					)
 				)
 
 
-			'click #webcam': ->
+		getImageURL: (cb) =>
 
-				Webcam.snap ((data_uri) ->
+			data = new FormData()
 
-					@selfie_url = data_uri
+			if @selfie_url
+				data_url = @selfie_url
+				data.append 'image', data_url
+				cb data
 
-					@$('#result img').attr('src', data_uri)
-					@$('#webcam-container').hide()
-					@$('#result-container').show()
+			else if @file_select_file
 
-				).bind @
+				reader = new FileReader()
 
-			'click #result': ->
+				reader.onloadend = ->
+					data.append 'image', reader.result
+					cb data
 
-				@$('#webcam-container').show()
-				@$('#result-container').hide()
+				reader.readAsDataURL @file_select_file
 
+				# data_url = 
+			
 
 		consts: ->
 			@current_page = 0
@@ -163,7 +202,7 @@ amd_define ['text!./html/start.html', 'text!./html/form.html', 'text!./html/cam.
 				if @autocomplete_data
 					@autofill @autocomplete_data
 
-			@on 'render:2', ->
+			@on 'render:3', ->
 				Webcam.attach @$('#webcam').get(0)
 				video_el = @$('#webcam video').get(0)
 
@@ -260,10 +299,12 @@ amd_define ['text!./html/start.html', 'text!./html/form.html', 'text!./html/cam.
 
 
 
-		next: ->
+		next: (ev) ->
+			if (ev) then ev.preventDefault()
 			@current_page++
 			@update()
-		prev: ->
+		prev: (ev) ->
+			if (ev) then ev.preventDefault()
 			@current_page--
 			@update()
 
