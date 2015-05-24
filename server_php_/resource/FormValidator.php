@@ -39,6 +39,7 @@ class FormValidator
             '2digitopt' => "^\d+(\,\d{2})?\$",
             '2digitforce' => "^\d+\,\d\d\$",
             'anything' => "^[\d\D]{1,}\$",
+            'whateva' => "^.*\$",
             'username' => "^[\w]{3,32}\$"
 );
 

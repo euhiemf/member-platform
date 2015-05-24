@@ -44,7 +44,7 @@
 				'last_name' => 'not_empty',
 				'nin' => 'number',
 				'sex' => 'not_empty',
-				'co_address' => 'anything',
+				'co_address' => 'whateva',
 				'street_address' => 'not_empty',
 				'postal_number' => 'not_empty',
 				'post_town' => 'not_empty',
