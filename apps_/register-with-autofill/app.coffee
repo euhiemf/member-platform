@@ -141,18 +141,6 @@ amd_define ['text!./html/start.html', 'text!./html/form.html', 'text!./html/uplo
 					NProgress.set 0.25 * step
 					tht.$("#progress").html step
 
-				# DELETE
-				tht.getImageURL (image_data) ->
-					request_file(base_url + '/image', 'CREATE', tht.pass, image_data, ->
-						sp 4
-						setTimeout((->
-							tht.$('.loading').hide()
-							tht.$('.finish').show()
-							NProgress.done()
-						), 750)
-					)
-
-				return
 
 				request(base_url, 'CREATE', tht.pass, {}, ->
 					sp 1

@@ -183,6 +183,13 @@
 			$headers = array_merge($headers, $_REQUEST);
 			$headers = array_merge($headers, $_FILES);
 
+			if (array_key_exists('Auth-Secret', $headers)) {
+				$headers['auth_secret'] = $headers['Auth-Secret'];
+			}
+			if (array_key_exists('Auth-Identity', $headers)) {
+				$headers['auth_identity'] = $headers['Auth-Identity'];
+			}
+
 			if (array_key_exists('payload', $headers) || array_key_exists('Payload', $headers)) {
 
 				// This code can probably be done nicer
@@ -196,7 +203,11 @@
 				$headers = array_merge($headers, $pl);
 			}
 
+			// die(print_r($this->params));
+
 			$this->params = $this->arrayToObject($headers);
+
+
 
 		}
 

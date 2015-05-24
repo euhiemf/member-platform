@@ -1,6 +1,7 @@
 <?php
 
 	require_once('database_installation.php');
+	require_once('password_compatibility_library.php');
 
 	class DatabaseActions extends DatabaseInstallation
 	{
