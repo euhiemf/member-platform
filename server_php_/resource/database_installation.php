@@ -78,8 +78,8 @@
 				`cetera` varchar(64));',
 
 				'CREATE TABLE IF NOT EXISTS `cards` (
-				`sql_index` INTEGER PRIMARY KEY,
-				`card_id` INTEGER,
+				`card_id` INTEGER PRIMARY KEY,
+				`card_number` INTEGER,
 				`issued` varchar(64),
 				`active` varchar(64),
 				`cetera` varchar(64));',

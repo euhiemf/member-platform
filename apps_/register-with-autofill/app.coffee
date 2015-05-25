@@ -25,6 +25,7 @@ request = (url, crud, pass, data, cb) ->
 		beforeSend: (request) =>
 			request.setRequestHeader('X-HTTP-Method-Override', method);
 
+		cache: false
 		dataType: 'json'
 		data: payload
 		headers: headers
@@ -189,6 +190,7 @@ amd_define ['text!./html/start.html', 'text!./html/form.html', 'text!./html/uplo
 			@selfie_url = ""
 			@code = ""
 			@form_data = {}
+			@autocomplete_data = {}
 
 		initialize: ->
 
@@ -202,7 +204,7 @@ amd_define ['text!./html/start.html', 'text!./html/form.html', 'text!./html/uplo
 
 				@$('#input_card_number').val @code
 
-				if @autocomplete_data
+				if _.keys(@autocomplete_data).length
 					@autofill @autocomplete_data
 
 			@on 'render:3', ->
@@ -263,7 +265,6 @@ amd_define ['text!./html/start.html', 'text!./html/form.html', 'text!./html/uplo
 
 
 		setAutoCompleteData: (data) =>
-			@autocomplete_data = {}
 			for key, val of data
 				key = key.replace(/\s|\r|\n/mg, '')
 				@autocomplete_data[key] = val

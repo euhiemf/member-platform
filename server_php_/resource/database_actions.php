@@ -181,16 +181,18 @@
 	    	$id = $this->getStudentID($email);
 	    	$datetime = time();
 
-	    	$sql = "INSERT INTO cards (sql_index, card_id, issued, active, cetera) VALUES(NULL, :card_id, :datetime, 'yes', '')";
+	    	$sql = "INSERT INTO cards (card_id, card_number, issued, active, cetera) VALUES(NULL, :card_number, :datetime, 'yes', '')";
 	    	$query = $this->db_connection->prepare($sql);
-	        $query->bindValue(':card_id', $card_number);
+	        $query->bindValue(':card_number', $card_number);
 	        $query->bindValue(':datetime', $datetime);
 			$query->execute();
+
+			$card_id = $this->db_connection->lastInsertId("card_id");
 
 	    	$sql = "INSERT INTO student_cards (sql_index, student_id, card_id, cetera) VALUES(NULL, :student_id, :card_id, '')";
 	    	$query = $this->db_connection->prepare($sql);
 	        $query->bindValue(':student_id', $id);
-	        $query->bindValue(':card_id', $card_number);
+	        $query->bindValue(':card_id', $card_id);
 			$query->execute();
 		}
 		public function bindImage($email, $image) {
