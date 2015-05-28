@@ -29,7 +29,9 @@
 		private function message($text) {
 			return "{\"message\": \"$text\"}";
 		}
-
+		private function error($text) {
+			return "{\"error\": \"$text\"}";
+		}
 
 		public function CREATE($email, $data) {
 			$this->db->bindCard($email, $data->card_number);

@@ -35,6 +35,9 @@
 		private function message($text) {
 			return "{\"message\": \"$text\"}";
 		}
+		private function error($text) {
+			return "{\"error\": \"$text\"}";
+		}
 
 
 		public function CREATE($email)
@@ -74,7 +77,7 @@
 
 				$id = $this->db->getStudentID($email);
 				if ($id == false) {
-					echo $this->message("Couln't find the user of $email");
+					echo $this->error("Couln't find the user of $email");
 				} else {
 					echo "{\"id\": \"$id\", \"email\": \"$email\", \"group\": \"student\"}";
 				}
@@ -93,12 +96,12 @@
 			$id = $this->db->getStudentID($new_email);
 
 			if ($exist_id == false) {
-				echo $this->message("$old_email does not exist!");
+				echo $this->error("$old_email does not exist!");
 				return false;
 			}
 
 			if ($id != false) {
-				echo $this->message("$new_email email is already taken");
+				echo $this->error("$new_email email is already taken");
 				return false;
 			}
 

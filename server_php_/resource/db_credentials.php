@@ -81,7 +81,10 @@
 		private function message($text) {
 			return "{\"message\": \"$text\"}";
 		}
-
+		private function error($text) {
+			return "{\"error\": \"$text\"}";
+		}
+		
 		public function CREATE($email, $data) {
 			$data = $this->validateData($data);
 			$this->db->setStudentCredentials($email, $data);

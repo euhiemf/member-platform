@@ -100,7 +100,7 @@
 			case 'image':
 				$import_name = 'db_image';
 				break;
-			default: die('{"message": "not valid path"}');
+			default: die('{"error": "not valid path"}');
 		}
 
 		$database->import($import_name, 'resource/' . $import_name . '.php');
