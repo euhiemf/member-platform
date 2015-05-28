@@ -1,5 +1,45 @@
 
-request = (url, crud, pass, data, cb) ->
+class Request
+
+	# @args = [url, crud, pass, data, attempts, cb]
+
+	constructor: (request) ->
+		@request = do (request) => ((args...) =>
+			debugger
+			@args = args
+			request.apply @, args
+
+		).bind(@)
+
+		return @request
+
+	success: (data = false) =>
+		is_error = _.has(data, 'error')
+
+		if data and is_error
+			@error()
+		else if not data
+			@error()
+		else if data
+			@args[5] data
+	error: =>
+		if @args[4] > 0
+			@args[4]--
+			@request.apply @, @args
+		else
+			@args[5] false
+
+	send: (options) =>
+		defaults =
+			type: 'POST'
+			cache: false
+			success: @success
+			error: @error
+
+		$.ajax _.extend(defaults, options)
+
+
+request = new Request (url, crud, pass, data, attempts, cb) ->
 
 	headers =
 		auth_identity: "admin"
@@ -17,35 +57,33 @@ request = (url, crud, pass, data, cb) ->
 		when 'DELETE' then method = 'DELETE'
 	
 
-	$.ajax
-		type: 'POST'
+	@send
 		url: url
 		# headers:
 		# 	'Content-Type': 'application/x-www-form-urlencoded'
 		beforeSend: (request) =>
 			request.setRequestHeader('X-HTTP-Method-Override', method);
 
-		cache: false
 		dataType: 'json'
 		data: payload
 		headers: headers
 
-		success: cb
-request_file = (url, crud, pass, payload, cb) ->
+
+request_file = new Request (url, crud, pass, payload, attempts, cb) ->
 	headers =
 		auth_identity: "admin"
 		auth_secret: pass
 
 
-	$.ajax
-		type: 'POST'
-		cache: false
+	@send
 		contentType: false
 		processData: false
 		url: url
 		data: payload
 		headers: headers
-		success: cb
+
+
+
 
 
 amd_define ['text!./html/start.html', 'text!./html/form.html', 'text!./html/upload.html', 'text!./html/cam.html', 'text!./html/done.html', './es6-promise', './webcam'], (templates..., Promise, Webcam) ->
@@ -59,7 +97,7 @@ amd_define ['text!./html/start.html', 'text!./html/form.html', 'text!./html/uplo
 		if location.hostname is 'localhost'
 			url = 'http://localhost/memberdev/user/noobtoothfairy@gmail.com'
 
-		request url, 'READ', password, {}, (data) -> (
+		request url, 'READ', password, {}, 2, (data) -> (
 			if data?.email is 'noobtoothfairy@gmail.com' then resolve() else reject(data)
 		)
 	)
@@ -138,20 +176,21 @@ amd_define ['text!./html/start.html', 'text!./html/form.html', 'text!./html/uplo
 
 				tht = @
 
-				sp = (step) ->
+				sp = (step, d) ->
 					NProgress.set 0.25 * step
 					tht.$("#progress").html step
+					if d is false then alert "error with #{step}"
 
 
-				request(base_url, 'CREATE', tht.pass, {}, ->
-					sp 1
-					request(base_url + '/card', 'CREATE', tht.pass, {card_number: tht.code}, ->
-						sp 2
-						request(base_url + '/credentials', 'CREATE', tht.pass, tht.form_data, ->
-							sp 3
+				request(base_url, 'CREATE', tht.pass, {}, 3, (d) ->
+					sp 1, d
+					request(base_url + '/card', 'CREATE', tht.pass, {card_number: tht.code}, 2, (d) ->
+						sp 2, d
+						request(base_url + '/credentials', 'CREATE', tht.pass, tht.form_data, 2, (d) ->
+							sp 3, d
 							tht.getImageURL (image_data) ->
-								request_file(base_url + '/image', 'CREATE', tht.pass, image_data, ->
-									sp 4
+								request_file(base_url + '/image', 'CREATE', tht.pass, image_data, 2, (d) ->
+									sp 4, d
 									setTimeout((->
 										tht.$('.loading').hide()
 										tht.$('.finish').show()
@@ -317,6 +356,7 @@ amd_define ['text!./html/start.html', 'text!./html/form.html', 'text!./html/uplo
 			@trigger "render:#{@current_page}"
 
 			try document.forms[0].querySelector('input').focus()
+			$("html, body").animate({ scrollTop: 0 })
 			
 
 
