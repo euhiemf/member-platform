@@ -5,7 +5,6 @@ class Request
 
 	constructor: (request) ->
 		@request = do (request) => ((args...) =>
-			debugger
 			@args = args
 			request.apply @, args
 
