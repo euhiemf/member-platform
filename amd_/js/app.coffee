@@ -1,6 +1,6 @@
 
 amd_requirejs.config
-	baseUrl: '/amd_',
+	baseUrl: window.BASE_URL + '/amd_',
 	paths:
 		config: '/config.json'
 		router: '/router.json'
