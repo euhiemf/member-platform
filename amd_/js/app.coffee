@@ -2,11 +2,11 @@
 amd_requirejs.config
 	baseUrl: window.BASE_URL + '/amd_',
 	paths:
-		config: '/config.json'
-		router: '/router.json'
+		config: window.BASE_URL + '/config.json'
+		router: window.BASE_URL + '/router.json'
 		text: 'lib/text'
 		coffee: 'lib/cs'
-		apps: '/apps_'
+		apps: window.BASE_URL + '/apps_'
 		noext: 'lib/noext'
 
 window.underscore = window._ = _ = require 'underscore'
