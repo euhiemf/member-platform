@@ -27,10 +27,9 @@
 	<script type="text/javascript" src='./amd_/lib/require.js'></script>
 
     <script>
+        window.BASE_URL = '';
         if (location.hostname === "ricsam.github.io") {
             window.BASE_URL = 'https://ricsam.github.io/member-platform';
-        } else {
-            window.BASE_URL = location.href.replace(/(\?.*|\#.*)$/g, '').replace(/\/$/, '') + '';
         }
     </script>
 </head>
