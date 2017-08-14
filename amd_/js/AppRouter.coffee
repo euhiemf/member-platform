@@ -36,7 +36,15 @@ class AppRouter extends Backbone.Router
 
 		# qr input, standalone handles itself despite the fact that it redirects to /apps/x
 
-		fragment = Backbone.history.fragment
+		fragment = Backbone.history.fragment.replace(BASE_URL, '');
+		if BASE_URL.length
+			try
+				repl = BASE_URL.match(/\.\w+\/\w{1}.*/)[0].replace(/^(.*\/)/, '') + "/";
+				fragment.replace(repl, '');
+			catch e
+				console.log e
+
+		console.log(fragment)
 
 		# dont call this function twice if already navigated
 		if _.has @last_page, 'fragment'

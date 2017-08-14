@@ -67,6 +67,8 @@ amd_requirejs ['text!router', 'text!config'], (str_router, str_config) ->
 		href = $(this).attr("href")
 		protocol =  "#{this.protocol}//"
 
+		console.log(protocol)
+
 		# Ensure the protocol is not part of URL, meaning its relative.
 		# Stop the event bubbling to ensure the link will not cause a page refresh.
 		if href.slice(protocol.length) != protocol
