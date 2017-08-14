@@ -32,12 +32,14 @@ class AppRouter extends Backbone.Router
 		@listenTo @, 'route', @onRoute, @
 
 		if BASE_URL
+		# BASE_URL = 'http://localdomain.ld:8080/wefwef'
 			prefix = BASE_URL.match(/\..+\/\w{1}.*/)[0].replace(/^(.*\/)/, '') + "/"
 			delete @routes["*404"]
 			for route, target of @routes
 				@routes[prefix + route] = target
 
-			@routes["*404"] = @notfound
+			@routes[prefix + "*404"] = @notfound
+		console.log(@routes)
 
 
 	onRoute: (name, args) ->
