@@ -33,8 +33,11 @@ class AppRouter extends Backbone.Router
 
 		if BASE_URL
 			prefix = BASE_URL.match(/\.\w+\/\w{1}.*/)[0].replace(/^(.*\/)/, '') + "/"
+			delete @routes["*404"];
 			for route, target of @routes
 				@routes[prefix + route] = target
+
+			@routes["*404"] = @notfound
 
 
 	onRoute: (name, args) ->
