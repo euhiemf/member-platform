@@ -40,7 +40,7 @@ class AppRouter extends Backbone.Router
 		if BASE_URL.length
 			try
 				repl = BASE_URL.match(/\.\w+\/\w{1}.*/)[0].replace(/^(.*\/)/, '') + "/";
-				fragment.replace(repl, '');
+				fragment = fragment.replace(repl, '');
 			catch e
 				console.log e
 
