@@ -31,9 +31,9 @@ class AppRouter extends Backbone.Router
 
 		@listenTo @, 'route', @onRoute, @
 
-		if BASE_URL
+		if window.BASE_URL
 		# BASE_URL = 'http://localdomain.ld:8080/wefwef'
-			prefix = BASE_URL.match(/\..+\/\w{1}.*/)[0].replace(/^(.*\/)/, '') + "/"
+			prefix = window.BASE_URL.match(/\..+\/\w{1}.*/)[0].replace(/^(.*\/)/, '') + "/"
 			for route, target of @routes
 				@route(prefix + route, target)
 
@@ -45,10 +45,10 @@ class AppRouter extends Backbone.Router
 	onRoute: (name, args) ->
 
 		# qr input, standalone handles itself despite the fact that it redirects to /apps/x
-		fragment = Backbone.history.fragment.replace(BASE_URL, '');
-		if BASE_URL.length
+		fragment = Backbone.history.fragment.replace(window.BASE_URL, '');
+		if window.BASE_URL.length
 			try
-				repl = BASE_URL.match(/\..+\/\w{1}.*/)[0].replace(/^(.*\/)/, '') + "/"
+				repl = window.BASE_URL.match(/\..+\/\w{1}.*/)[0].replace(/^(.*\/)/, '') + "/"
 				fragment = fragment.replace(repl, '');
 			catch e
 				console.log e
