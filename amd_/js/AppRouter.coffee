@@ -31,6 +31,11 @@ class AppRouter extends Backbone.Router
 
 		@listenTo @, 'route', @onRoute, @
 
+		if BASE_URL
+			prefix = BASE_URL.match(/\.\w+\/\w{1}.*/)[0].replace(/^(.*\/)/, '') + "/"
+			for route, target of @routes
+				@routes[prefix + route] = target
+
 
 	onRoute: (name, args) ->
 
