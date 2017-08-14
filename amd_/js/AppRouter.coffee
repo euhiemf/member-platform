@@ -32,8 +32,8 @@ class AppRouter extends Backbone.Router
 		@listenTo @, 'route', @onRoute, @
 
 		if BASE_URL
-			prefix = BASE_URL.match(/\.\w+\/\w{1}.*/)[0].replace(/^(.*\/)/, '') + "/"
-			delete @routes["*404"];
+			prefix = BASE_URL.match(/\..+\/\w{1}.*/)[0].replace(/^(.*\/)/, '') + "/"
+			delete @routes["*404"]
 			for route, target of @routes
 				@routes[prefix + route] = target
 
@@ -43,11 +43,12 @@ class AppRouter extends Backbone.Router
 	onRoute: (name, args) ->
 
 		# qr input, standalone handles itself despite the fact that it redirects to /apps/x
+		BASE_URL = 'http://localdomain.ld:8080/wefwef'
 
 		fragment = Backbone.history.fragment.replace(BASE_URL, '');
 		if BASE_URL.length
 			try
-				repl = BASE_URL.match(/\.\w+\/\w{1}.*/)[0].replace(/^(.*\/)/, '') + "/";
+				repl = BASE_URL.match(/\..+\/\w{1}.*/)[0].replace(/^(.*\/)/, '') + "/"
 				fragment = fragment.replace(repl, '');
 			catch e
 				console.log e
@@ -72,6 +73,7 @@ class AppRouter extends Backbone.Router
 
 		for module in @modules
 			match = fragment.match module[0]
+			console.log match
 			if match then @trigger module[1], match[module[2]]
 
 	flatten: ->
